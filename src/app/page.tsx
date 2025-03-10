@@ -1,12 +1,11 @@
 // src/app/page.tsx
-
 "use client";
 
 import { useState } from "react";
 import ChatInput from "@/components/ui/ChatInput";
 import MessageWindow from "@/components/ui/MessageWindow";
 import SettingsModal from "@/components/ui/SettingsModal";
-import { ChatHistory, ChatSettings } from "@/types";
+import { ChatHistory, ChatSettings, Message, MessageRole } from "@/types";
 
 export default function Home() {
   const [history, setHistory] = useState<ChatHistory>([]);
@@ -18,8 +17,8 @@ export default function Home() {
   });
 
   const handleSend = async (message: string) => {
-    const newUserMessage = {
-      role: "user",
+    const newUserMessage: Message = {
+      role: "user" as MessageRole,
       parts: [{ text: message }],
     };
 
@@ -46,8 +45,8 @@ export default function Home() {
         return;
       }
 
-      const aiMessage = {
-        role: "model",
+      const aiMessage: Message = {
+        role: "model" as MessageRole,
         parts: [{ text: data.response }],
       };
 

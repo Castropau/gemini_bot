@@ -1,7 +1,8 @@
+//google-gemini-clone/src/utils/geminiHelpers.ts
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ChatHistory, GenerationConfig, ChatSettings } from "@/types";
-
 const apiKey = process.env.GEMINI_API_KEY;
+
 if (!apiKey) {
   throw new Error(
     "GEMINI_API_KEY is not defined in the environment variables."
@@ -15,26 +16,24 @@ export async function chattogemini(
   history: ChatHistory,
   settings: ChatSettings
 ): Promise<string> {
-  try {
-    console.log(settings)
-    const model = genAI.getGenerativeModel({
-        model: settings.model || "gemini-1.5-flash",
-        systemInstruction:
-          settings.systemInstruction || "can you respond in japanese",
-      });
-    
-      const generationConfig: GenerationConfig = {
-        temperature: settings.temperature || 1,
-        topP: 0.95,
-        responseMimeType: "text/plain",
-      };
-    
-      const chatSession = model.startChat({
-        generationConfig,
-        history: history,
-      });
+  const model = genAI.getGenerativeModel({
+    model: settings.model || "gemini-1.5-flash",
+    systemInstruction:
+      settings.systemInstruction || "you are a helpful assistant",
+  });
 
-      console.log(generationConfig)
+  const generationConfig: GenerationConfig = {
+    temperature: settings.temperature || 1,
+    topP: 0.95,
+    responseMimeType: "text/plain",
+  };
+
+  const chatSession = model.startChat({
+    generationConfig,
+    history: history,
+  });
+
+  try {
     const result = await chatSession.sendMessage(userMessage);
     return result.response.text();
   } catch (error) {
