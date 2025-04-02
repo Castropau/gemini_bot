@@ -71,14 +71,14 @@ export default function Home() {
   return (
     <div className="flex flex-col ">
       <MessageWindow history={history} />
-     
+
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={handleCloseSettings}
         onSave={handleSaveSettings}
         currentSettings={settings}
       />
-       <ChatInput onSend={handleSend} onOpenSettings={handleOpenSettings} />
+      <ChatInput onSend={handleSend} onOpenSettings={handleOpenSettings} />
     </div>
   );
 }
