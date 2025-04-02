@@ -46,7 +46,7 @@ export default function ChatInput({ onSend, onOpenSettings }: ChatInputProps) {
         {/* Input wrapper */}
         <div className="relative flex-1 mx-2">
           <textarea
-            className="w-full px-3 py-2 bg-transparent border-none focus:outline-none  placeholder-gray-400"
+            className="w-full px-3 py-2 bg-transparent border-none focus:outline-none"
             placeholder="Type a message..."
             value={message}
             onChange={handleChange}
