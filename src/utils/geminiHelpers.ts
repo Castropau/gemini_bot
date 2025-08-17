@@ -2,6 +2,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ChatHistory, GenerationConfig, ChatSettings } from "@/types";
 const apiKey = process.env.GEMINI_API_KEY;
+// const apiKey = 'AIzaSyChJQDI_7HenlztGFmRvc6ygeWqJFGLzOk'
 
 if (!apiKey) {
   throw new Error(
@@ -11,6 +12,36 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 
+// export async function chattogemini(
+//   userMessage: string,
+//   history: ChatHistory,
+//   settings: ChatSettings
+// ): Promise<string> {
+//   const model = genAI.getGenerativeModel({
+//     model: settings.model || "gemini-1.5-flash",
+//     systemInstruction:
+//       settings.systemInstruction || "you are a helpful assistant",
+//   });
+
+//   const generationConfig: GenerationConfig = {
+//     temperature: settings.temperature || 1,
+//     topP: 0.95,
+//     responseMimeType: "text/plain",
+//   };
+
+//   const chatSession = model.startChat({
+//     generationConfig,
+//     history: history,
+//   });
+
+//   try {
+//     const result = await chatSession.sendMessage(userMessage);
+//     return result.response.text();
+//   } catch (error) {
+//     console.error("Error interacting with the model:", error);
+//     throw error;
+//   }
+// }
 export async function chattogemini(
   userMessage: string,
   history: ChatHistory,
@@ -18,19 +49,19 @@ export async function chattogemini(
 ): Promise<string> {
   const model = genAI.getGenerativeModel({
     model: settings.model || "gemini-1.5-flash",
-    systemInstruction:
-      settings.systemInstruction || "you are a helpful assistant",
+    systemInstruction: settings.systemInstruction || "you are a helpful assistant",
   });
 
-  const generationConfig: GenerationConfig = {
-    temperature: settings.temperature || 1,
-    topP: 0.95,
-    responseMimeType: "text/plain",
-  };
+  // Filter out any 'model' messages from history for initialization
+  const filteredHistory = history.filter((msg) => msg.role === "user");
 
   const chatSession = model.startChat({
-    generationConfig,
-    history: history,
+    generationConfig: {
+      temperature: settings.temperature || 1,
+      topP: 0.95,
+      responseMimeType: "text/plain",
+    },
+    history: filteredHistory, // only user messages
   });
 
   try {
